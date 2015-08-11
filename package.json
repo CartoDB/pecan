@@ -5,7 +5,7 @@
   "main": "src/pecan.js",
   "scripts": {
     "test": "tape tests/*.js",
-    "testling": "browserify tests/*.js | testling"
+    "testling": "browserify tests/*.js | testling",
   },
   "repository": {
     "type": "git",
@@ -26,9 +26,9 @@
   },
   "homepage": "https://github.com/CartoDB/pecan",
   "devDependencies": {
-    "browserify": "~11.x",
-    "tape": "~4.x",
-    "testling": "~1.x",
-    "underscore": "~1.4.x"
+    "browserify": "~11.0.x",
+    "tape": "~4.0.x",
+    "testling": "~1.7.x",
+    "underscore": "~1.4.x",
   }
 }
