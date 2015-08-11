@@ -1,0 +1,34 @@
+{
+  "name": "cartodb-pecan",
+  "version": "0.1.0",
+  "description": "This are not the cookies you're looking for",
+  "main": "src/pecan.js",
+  "scripts": {
+    "test": "tape tests/*.js",
+    "testling": "browserify tests/*.js | testling"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/CartoDB/pecan.git"
+  },
+  "keywords": [
+    "cartodb",
+    "pecan"
+  ],
+  "author": {
+    "name": "CartoDB",
+    "url": "http://cartodb.com/",
+    "email": "wadus@cartodb.com"
+  },
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/CartoDB/pecan/issues"
+  },
+  "homepage": "https://github.com/CartoDB/pecan",
+  "devDependencies": {
+    "browserify": "~11.x",
+    "tape": "~4.x",
+    "testling": "~1.x",
+    "underscore": "~1.4.x"
+  }
+}
