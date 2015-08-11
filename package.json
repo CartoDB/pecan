@@ -6,6 +6,7 @@
   "scripts": {
     "test": "tape tests/*.js",
     "testling": "browserify tests/*.js | testling",
+    "watchtest": "watch 'npm test'"
   },
   "repository": {
     "type": "git",
@@ -30,5 +31,6 @@
     "tape": "~4.0.x",
     "testling": "~1.7.x",
     "underscore": "~1.4.x",
+    "watch": "~0.16.x"
   }
 }
