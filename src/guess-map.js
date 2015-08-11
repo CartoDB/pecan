@@ -3,7 +3,7 @@ var getWeightFromShape = require('./get-weight-from-shape');
 var getMethodProperties = require('./get-method-properties');
 var CSS = require('./cartocss');
 
-module.exports = function(sql, tableName, column, stats) {
+module.exports = function(tableName, column, stats) {
   var geometryType = column.get('geometry_type');
   var columnName = column.get('column');
   var visualizationType = 'choropleth';
@@ -81,7 +81,6 @@ module.exports = function(sql, tableName, column, stats) {
   }
 
   var properties = {
-    sql: sql,
     geometryType: geometryType,
     column: columnName,
     bbox: column.get('bbox'),
