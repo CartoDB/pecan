@@ -3,9 +3,28 @@ var getWeightFromShape = require('./get-weight-from-shape');
 var getMethodProperties = require('./get-method-properties');
 var CSS = require('./cartocss');
 
-module.exports = function(tableName, column, stats) {
-  var geometryType = column.get('geometry_type');
-  var columnName = column.get('column');
+/**
+ * Get metadata to render a CartoDB map (visualization) from a set of given table and column data, see params.
+ *
+ * @param {Object} opts hash with following keys:
+ *   - tableName: {String}
+ *   - column: {Object} hash with following keys:
+ *     - stats: {Object} stats as given from a describe call on a SQL API.
+ *     - geometryType: {String} e.g. 'points', 'polygon' or similar.
+ *     - bbox: {Array[Array]} e.g. [[0.0, 0.1], [1.0, 1.1]]
+ *   - dependencies: {Object} hash with following keys:
+ *     - underscore: {Object} only used for some column types though, e.g. number, string
+ * @return {Object}
+ */
+module.exports = function(opts) {
+  var _ = opts.dependencies.underscore;
+  var tableName = opts.tableName;
+
+  var column = opts.column;
+  var geometryType = column.geometryType;
+  var stats = column.stats;
+  var columnName = stats.column;
+
   var visualizationType = 'choropleth';
   var css = null;
   var type = stats.type;
@@ -83,7 +102,7 @@ module.exports = function(tableName, column, stats) {
   var properties = {
     geometryType: geometryType,
     column: columnName,
-    bbox: column.get('bbox'),
+    bbox: column.bbox,
     type: type,
     visualizationType: visualizationType
   };
