@@ -3,5 +3,6 @@
 1. Commit package.json, CHANGELOG.md
 1. git tag -a Major.Minor.Patch # use CHANGELOG.md section as content
 1. Stub CHANGELOG.md for next version
+1. Run `npm publish`, make sure you have privileges
 
-This project adheres to [Semantic Versioning](http://semver.org/), in particular:
+This project adheres to [Semantic Versioning](http://semver.org/)
