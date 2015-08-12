@@ -1,6 +1,7 @@
 var ramps = require('./cartocss/color-ramps');
 var getWeightFromShape = require('./get-weight-from-shape');
 var getMethodProperties = require('./get-method-properties');
+var deepDefaults = require('./deep-defaults');
 var CSS = require('./cartocss');
 
 /**
@@ -14,11 +15,31 @@ var CSS = require('./cartocss');
  *     - bbox: {Array[Array]} e.g. [[0.0, 0.1], [1.0, 1.1]]
  *   - dependencies: {Object} hash with following keys:
  *     - underscore: {Object} only used for some column types though, e.g. number, string
+ *   - thresholds: {Object} See list in code
  * @return {Object}
  */
 module.exports = function(opts) {
   var _ = opts.dependencies.underscore;
   var tableName = opts.tableName;
+
+  var thresholds = deepDefaults(opts.thresholds, {
+    number: {
+      forBubbleMap: {
+        minCalcWeight: 0.5,
+        maxStatsCount: 200
+      },
+      forCategoryOrBubbleMap: {
+        minStatsWeight: 0.5,
+        distinctPercentage: 25,
+        forCategory: {
+          maxDistinctPercentage: 1
+        },
+        forBubble: {
+          minDistinctPercentage: 1
+        }
+      }
+    }
+  });
 
   var column = opts.column;
   var geometryType = column.geometryType;
@@ -32,21 +53,21 @@ module.exports = function(opts) {
   var distinctPercentage = (stats.distinct / stats.count) * 100;
 
   if (type === 'number') {
-    var calc_weight = (stats.weight + getWeightFromShape(stats.dist_type)) / 2;
+    var calcWeight = (stats.weight + getWeightFromShape(stats.dist_type)) / 2;
 
-    if (calc_weight >= 0.5) {
+    if (calcWeight >= thresholds.number.forBubbleMap.minCalcWeight) {
       var visFunction = CSS.choropleth;
       var properties = getMethodProperties(stats);
 
-      if (stats.count < 200 && geometryType === 'point'){
+      if (stats.count < thresholds.number.forBubbleMap.maxStatsCount && geometryType === 'point'){
         visualizationType = 'bubble';
         visFunction = CSS.bubble;
       }
 
       css = visFunction(properties.method, tableName, columnName, geometryType, properties.ramp);
 
-    } else if (stats.weight > 0.5 || distinctPercentage < 25) {
-      if (distinctPercentage < 1) {
+    } else if (stats.weight > thresholds.number.forCategoryOrBubbleMap.minStatsWeight || distinctPercentage < thresholds.number.forCategoryOrBubbleMap.maxDistinctPercentage) {
+      if (distinctPercentage < thresholds.number.forCategoryOrBubbleMap.forCategory.maxDistinctPercentage) {
         visualizationType = 'category';
 
         var cats = stats.cat_hist;
@@ -57,7 +78,7 @@ module.exports = function(opts) {
         css = CSS.category(cats, tableName, columnName, geometryType, { type: type });
         metadata = CSS.categoryMetadata(cats, { type: type });
 
-      } else if (distinctPercentage >=1) {
+      } else if (distinctPercentage >= thresholds.number.forCategoryOrBubbleMap.forBubble.minDistinctPercentage) {
 
         var visFunction = CSS.choropleth;
 
