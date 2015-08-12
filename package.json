@@ -1,10 +1,11 @@
 {
   "name": "cartodb-pecan",
   "version": "1.0.0",
-  "description": "",
+  "description": "Pretty Elegant Cartographic Analysis eNgine",
   "main": "src/pecan.js",
   "scripts": {
     "test": "tape tests/*.js",
+    "prepublish": "npm test",
     "testling": "browserify tests/*.js | testling"
   },
   "repository": {
@@ -20,6 +21,12 @@
     "url": "http://cartodb.com/",
     "email": "wadus@cartodb.com"
   },
+  "contributors": [
+    "Javier Arce Eschbacher <javierarce@cartodb.com>",
+    "Francisco Dans <francisco@cartodb.com>",
+    "Andy Eschbacher <eschbacher@cartodb.com>",
+    "Nicklas Gummesson <nicklas@cartodb.com>"
+  ],
   "licenses": [
     {
       "type": "BSD",
