@@ -1,7 +1,7 @@
 {
   "name": "cartodb-pecan",
   "version": "1.0.0",
-  "description": "This are not the cookies you're looking for",
+  "description": "",
   "main": "src/pecan.js",
   "scripts": {
     "test": "tape tests/*.js",
