@@ -20,7 +20,12 @@
     "url": "http://cartodb.com/",
     "email": "wadus@cartodb.com"
   },
-  "license": "BSD",
+  "licenses": [
+    {
+      "type": "BSD",
+      "url": "https://github.com/CartoDB/pecan/blob/master/LICENSE"
+    }
+  ],
   "bugs": {
     "url": "https://github.com/CartoDB/pecan/issues"
   },
