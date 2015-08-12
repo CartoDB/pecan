@@ -1,12 +1,11 @@
 {
   "name": "cartodb-pecan",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "This are not the cookies you're looking for",
   "main": "src/pecan.js",
   "scripts": {
     "test": "tape tests/*.js",
-    "testling": "browserify tests/*.js | testling",
-    "watchtest": "watch 'npm test'"
+    "testling": "browserify tests/*.js | testling"
   },
   "repository": {
     "type": "git",
@@ -30,7 +29,6 @@
     "browserify": "~11.0.x",
     "tape": "~4.0.x",
     "testling": "~1.7.x",
-    "underscore": "~1.4.x",
-    "watch": "~0.16.x"
+    "underscore": "~1.4.x"
   }
 }
