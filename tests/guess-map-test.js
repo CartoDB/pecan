@@ -2,6 +2,7 @@ var test = require('tape');
 var Pecan = require('../src/pecan');
 var _ = require('underscore');
 
+// DRY test cases
 var guessMap = function(opts) {
   return Pecan.guessMap(_.defaults(opts, {
     tableName: 'testable',
@@ -11,7 +12,7 @@ var guessMap = function(opts) {
   }));
 };
 
-test('date column', function(t) {
+test('guessMap: date column', function(t) {
   t.plan(1);
 
   var results = guessMap({
@@ -36,41 +37,60 @@ test('date column', function(t) {
   t.notEqual(results.css.indexOf('torque'), -1, 'should return CSS for a torque style');
 });
 
-test('number column', function(t) {
-  t.plan(2);
+test('guessMap: number column', function(t) {
+  t.plan(3);
 
-  var opts = {
-    column: {
-      "geometryType": "point",
-      "stats": {
-        "type": "number",
-        "stddev": 0.00399008175326912,
-        "null_ratio": 0,
-        "count": 103,
-        "distinct": 10,
-        "avg": 4.4781284606866,
-        "max": 25,
-        "min": 0,
-        "stddevmean": 0.805032851171774,
-        "weight": 0.8,
-        "quantiles": [0.001,2,4,5,6,8,25],
-        "jenks": [3,3,5,7.4,8.2,13,25],
-        "headtails": [4.4781284606866,7.369585253456221,10.139506172839507,13.511538461538462,17.08823529411765,20.8,24.5],
-        "dist_type": "U",
-        "column": "asdfd"
+  var opts = function() {
+    return {
+      column: {
+        "geometryType": "point",
+        "stats": {
+          "type": "number",
+          "stddev": 0.00399008175326912,
+          "null_ratio": 0,
+          "count": 103,
+          "distinct": 10,
+          "avg": 4.4781284606866,
+          "max": 25,
+          "min": 0,
+          "stddevmean": 0.805032851171774,
+          "weight": 0.8,
+          "quantiles": [0.001,2,4,5,6,8,25],
+          "jenks": [3,3,5,7.4,8.2,13,25],
+          "headtails": [4.4781284606866,7.369585253456221,10.139506172839507,13.511538461538462,17.08823529411765,20.8,24.5],
+          "dist_type": "U",
+          "column": "asdfd"
+        }
+      }
+    };
+  };
+
+  var results = guessMap(opts());
+  t.notEqual(results.css.indexOf('bubble'), -1, 'should return CSS for a bubble map for a point geometry type');
+
+  var data = opts();
+  data.thresholds = {
+    number: {
+      forBubbleMap: {
+        minCalcWeight: 9000,
+        maxStatsCount: 1
+      },
+      forCategoryOrBubbleMap: {
+        minStatsWeight: 9000,
+        maxDistinctPercentage: 0
       }
     }
   };
+  var results = guessMap(data);
+  t.notEqual(results.css, undefined, 'should return nothing since not meeting thresholds');
 
-  var results = guessMap(opts);
-  t.notEqual(results.css.indexOf('bubble'), -1, 'should return CSS for a bubble map for a point geometry type');
-
-  opts.column.geometryType = 'polygon';
-  var results = guessMap(opts);
+  var data = opts();
+  data.column.geometryType = 'polygon';
+  var results = guessMap(data);
   t.notEqual(results.css.indexOf('choropleth'), -1, 'should return CSS for a choropleth map for a non-point (e.g. polygon) geometry type');
 });
 
-test('string column', function(t) {
+test('guessMap: string column', function(t) {
   t.plan(1);
 
   var results = guessMap({
@@ -83,7 +103,7 @@ test('string column', function(t) {
   t.notEqual(results.css.indexOf('category'), -1, 'should return CSS for category map');
 });
 
-test('boolen column', function(t) {
+test('guessMap: boolen column', function(t) {
   t.plan(1);
 
   var results = guessMap({
