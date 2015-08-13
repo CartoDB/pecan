@@ -8,7 +8,7 @@ var assert = function(t, obj) {
   t.equal(Pecan.hasEnoughToGuess(obj.testData), obj.expectedResult, obj.desc);
 };
 
-test('insufficient data', function(t) {
+test('hasEnoughToGuess: insufficient data', function(t) {
   t.plan(4);
 
   assert(t, {
@@ -33,8 +33,8 @@ test('insufficient data', function(t) {
   });
 });
 
-test('valid geom stats', function(t) {
-  t.plan(4);
+test('hasEnoughToGuess: valid geom stats', function(t) {
+  t.plan(5);
 
   var defaultData = {
     isPointGeometryType: true,
@@ -51,15 +51,28 @@ test('valid geom stats', function(t) {
     expectedResult: true
   });
   assert(t, {
+    desc: 'a high enough threshold for min stats density should return different result',
+    testData: override(defaultData, {thresholds: { geom: { minStatsDensity: 9000 } }}),
+    expectedResult: false
+  });
+  assert(t, {
     desc: 'should be a point geometry type',
     testData: override(defaultData, {isPointGeometryType: false}),
     expectedResult: false
   });
-  t.equal(Pecan.hasEnoughToGuess(override(defaultData.stats, {cluster_rate: 0.0001, density: 1})), false, 'cluster_rate should be above threshold');
-  t.equal(Pecan.hasEnoughToGuess(override(defaultData.stats, {cluster_rate: 1, density: 0.0001})), false, 'density should be above threshold');
+  assert(t, {
+    desc: 'cluster_rate should be above threshold',
+    testData: override(defaultData.stats, {cluster_rate: 0.0001, density: 1}),
+    expectedResult: false
+  });
+  assert(t, {
+    desc: 'density should be above threshold',
+    testData: override(defaultData.stats, {cluster_rate: 1, density: 0.0001}),
+    expectedResult: false
+  });
 });
 
-test('valid string stats', function(t) {
+test('hasEnoughToGuess: valid string stats', function(t) {
   t.plan(2);
 
   var defaultData = {
@@ -81,7 +94,7 @@ test('valid string stats', function(t) {
   });
 });
 
-test('valid number data', function(t) {
+test('hasEnoughToGuess: valid number data', function(t) {
   t.plan(2);
 
   var defaultData = {
@@ -107,7 +120,7 @@ test('valid number data', function(t) {
   // TODO test remaining cases
 });
 
-test('valid boolean', function(t) {
+test('hasEnoughToGuess: valid boolean', function(t) {
   t.plan(2);
 
   var defaultData = {
@@ -129,7 +142,7 @@ test('valid boolean', function(t) {
   });
 });
 
-test('valid date', function(t) {
+test('hasEnoughToGuess: valid date', function(t) {
   t.plan(3);
 
   var defaultData = {
